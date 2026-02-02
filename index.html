@@ -16,6 +16,25 @@
       overflow: hidden;
     }
 
+    /* HEART RAIN */
+    .heart {
+      position: fixed;
+      top: -10px;
+      color: #ff4d6d;
+      font-size: 20px;
+      animation: fall linear forwards;
+      pointer-events: none;
+      opacity: 0.8;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
     .card {
       position: relative;
       background: white;
@@ -23,6 +42,7 @@
       border-radius: 18px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       text-align: center;
+      z-index: 2;
     }
 
     img {
@@ -60,7 +80,6 @@
       position: relative;
     }
 
-    /* spam text */
     .spam {
       position: absolute;
       font-size: 20px;
@@ -68,6 +87,7 @@
       color: #ff4d6d;
       pointer-events: none;
       animation: fadeOut 2s forwards;
+      z-index: 1;
     }
 
     @keyframes fadeOut {
@@ -79,49 +99,65 @@
 
 <body>
 
-  <div class="card">
+  <div class="card" id="card">
     <img src="photo.jpg" alt="Special photo">
 
     <h1>Will you be Ken's Valentine? 💖</h1>
 
     <div class="buttons">
-      <button id="yesBtn" onclick="sayYes()">Yes 💘</button>
+      <button id="yesBtn" onclick="firstYes()">Yes 💘</button>
       <button id="noBtn" onclick="handleNo()">No 😶</button>
     </div>
   </div>
 
   <script>
+    /* HEART RAIN LOGIC */
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💖";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 15 + "px";
+      heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(createHeart, 300);
+
+    /* VALENTINE LOGIC */
     let yesSize = 1;
     let noSize = 1;
     let noClicks = 0;
 
     const messages = [
-      "please? 🥺",
-      "why do you wanna hurt Ken 😭",
-      "c'mon 😔",
-      "say yes 😭💔",
-      "KEN IS SAD",
-      "PLS PLS PLS"
+      "pleaseee 🥺",
+      "why would you do this ",
+      "KEN IS SAD ",
+      "wasteee fellowww",
+      "OK DAAAA BOYYYY",
+      "Fake loveee laaaa"
     ];
 
     function handleNo() {
       noClicks++;
 
-      // YES bigger, NO smaller
       yesSize += 0.25;
       noSize -= 0.15;
 
       document.getElementById("yesBtn").style.transform =
         `scale(${yesSize})`;
+
       document.getElementById("noBtn").style.transform =
         `scale(${Math.max(noSize, 0.3)})`;
 
-      // spam text
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         createSpam();
       }
 
-      // after 2 clicks, NO runs away
       if (noClicks >= 3) {
         runAway();
       }
@@ -137,111 +173,49 @@
       spam.style.top = Math.random() * window.innerHeight + "px";
 
       document.body.appendChild(spam);
-
       setTimeout(() => spam.remove(), 2000);
     }
 
     function runAway() {
       const noBtn = document.getElementById("noBtn");
-
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-
       noBtn.style.position = "absolute";
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+      noBtn.style.left =
+        Math.random() * (window.innerWidth - 120) + "px";
+      noBtn.style.top =
+        Math.random() * (window.innerHeight - 60) + "px";
     }
 
-    function sayYes() {
-      document.body.innerHTML = `
-        <div style="
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          height:100vh;
-          background:#ffe6ee;
-          font-family:Arial;
-          text-align:center;
-        ">
-          <h1>
-            Lessss gooooo <br>
-            Ken is VERY happy now 😍
-            What do you say we be eachother's valentine till we conquer maldives? (and u let me conquer you)
-            (After maldives also?? :) )
-          </h1>
+    function firstYes() {
+      document.getElementById("card").innerHTML = `
+        <h1>
+          LESSS GOOOO <br><br>
+          Will you be my Valentine<br>
+          till we conquer the Maldives together? and the world? (and you let me conquer youu🍆) 🌊
+        </h1>
+
+        <div class="buttons">
+          <button id="yesBtn" onclick="secondYes()">YES 😍</button>
+          <button id="noBtn" onclick="runAway()">No 🙃</button>
         </div>
       `;
     }
-  </script>
-  <div class="buttons">
-      <button id="yesBtn" onclick="sayYes()">Yes 💘</button>
-      <button id="noBtn" onclick="handleNo()">No 😶</button>
-    </div>
-  </div>
 
-  <script>
-    let yesSize = 1;
-    let noSize = 1;
-    let noClicks = 0;
+    function secondYes() {
+      document.getElementById("card").innerHTML = `
+        <h1>
+          One last thing<br><br>
+          Will you stay with me<br>
+          for every Valentine after this too? 🌹
+        </h1>
 
-    const messages = [
-      "please? 🥺",
-      "why do you wanna hurt Ken 😭",
-      "c'mon 😔",
-      "say yes 😭💔",
-      "KEN IS SAD",
-      "PLS PLS PLS"
-    ];
-
-    function handleNo() {
-      noClicks++;
-
-      // YES bigger, NO smaller
-      yesSize += 0.25;
-      noSize -= 0.15;
-
-      document.getElementById("yesBtn").style.transform =
-        `scale(${yesSize})`;
-      document.getElementById("noBtn").style.transform =
-        `scale(${Math.max(noSize, 0.3)})`;
-
-      // spam text
-      for (let i = 0; i < 6; i++) {
-        createSpam();
-      }
-
-      // after 2 clicks, NO runs away
-      if (noClicks >= 3) {
-        runAway();
-      }
+        <div class="buttons">
+          <button id="yesBtn" onclick="finalYes()">ALWAYS.</button>
+          <button id="noBtn" onclick="runAway()">No. (might as well leave me now to reduce damage😔)</button>
+        </div>
+      `;
     }
 
-    function createSpam() {
-      const spam = document.createElement("div");
-      spam.className = "spam";
-      spam.innerText =
-        messages[Math.floor(Math.random() * messages.length)];
-
-      spam.style.left = Math.random() * window.innerWidth + "px";
-      spam.style.top = Math.random() * window.innerHeight + "px";
-
-      document.body.appendChild(spam);
-
-      setTimeout(() => spam.remove(), 2000);
-    }
-
-    function runAway() {
-      const noBtn = document.getElementById("noBtn");
-
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-
-      noBtn.style.position = "absolute";
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-    }
-
-    function sayYes() {
+    function finalYes() {
       document.body.innerHTML = `
         <div style="
           display:flex;
@@ -253,7 +227,9 @@
           text-align:center;
         ">
           <h1>
-            I lovee you sooo muchhh mwuahh 
+            Woahhhhh, i'll cook for you late night when ur studyingg dw 😋 🥹<br><br>
+            Well, we cant rly do anything cuz of boards but, let this be the first valentines out of the many with the one I love the most 😘
+            I loveee you my dear valentine
           </h1>
         </div>
       `;
